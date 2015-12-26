@@ -16,9 +16,11 @@
     "load-grunt-tasks": "^3.3.0"
   },
   "dependencies": {
+    "async": "^1.5.0",
     "csv": "^0.4.6",
     "mapbox": "^0.11.0",
     "mongodb": "^2.0.52",
-    "mongoskin": "^2.0.3"
+    "mongoskin": "^2.0.3",
+    "polyline": "^0.2.0"
   }
 }
