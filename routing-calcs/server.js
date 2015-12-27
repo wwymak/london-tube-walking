@@ -47,7 +47,8 @@ var routeSave = function(start, end){
                     lng: +end.Longitude
                 },
                 distance: route.route_summary.total_distance /1000, //convert to km
-                routePoints: polyline.decode(route.route_geometry)
+                routePoints: route.route_geometry
+                //routePoints: polyline.decode(route.route_geometry)
             };
             routeCollection.insertOne(doc, function(err, r){
                 console.log(r.insertedCount);
@@ -78,7 +79,7 @@ var routeSaveAsync = function(start, end, callback){
                     lng: +end.Longitude
                 },
                 distance: route.route_summary.total_distance /1000, //convert to km
-                routePoints: polyline.decode(route.route_geometry)
+                routePoints: route.route_geometry
             };
             routeCollection.insertOne(doc, function(err, r){
                 if(err){
@@ -98,12 +99,6 @@ var parser = parse({
     delimiter: ',',
     columns: true
 }, function(err, data){
-    //tubeStationData = data;
-    //var coords = []
-    ////var coords = [[52.519930,13.438640], [52.513191,13.415852]];
-    //for(var i = 0; i< 2; i++){
-    //    coords.push([+data[i].Latitude, +data[i].Longitude])
-    //}
 
     function calcRouteAndSaveToDB(tubeStationDataArr){
         var arr = tubeStationDataArr.map(function(d, i){
@@ -135,108 +130,17 @@ var parser = parse({
             callback);
 
                 }
-            //}else {
-            //    return function (j, callback){
-            //        console.log(j, d.startData, arr[i].startData)
-            //        async.each(d.dataArr, function(dataPoint, callback1){
-            //            routeSaveAsync(d.startData, dataPoint, callback1);
-            //        }, function(err){
-            //            if(err){
-            //                console.log(err)
-            //            }else{
-            //                callback('null', j)
-            //            }
-            //        })
-            //
-            //    }
-            //}
         });
-
-        console.log(taskArr.length)
-
-        function routeCall(data, callback){
-            async.each(d.dataArr, function(dataPoint, callback1){
-                routeSaveAsync(d.startData, dataPoint, callback1);
-            }, function(err){
-                if(err){
-                    console.log(err)
-                }else{
-                    callback('null', i)
-                }
-            })
-
-        }
-
-        //async.each(arr, routeCall, function(err){
-        //    // if any of the file processing produced an error, err would equal that error
-        //    if( err ) {
-        //        console.log('error', err);
-        //    } else {
-        //        console.log('All files have been processed successfully');
-        //    }
-        //    })
         async.series(taskArr, function(err, r){
             console.log(err, r, "done")
-        })
-
-        //async.ser
+        });
     }
-
-    function getRouteAndSave(unsavedTubeData){
-        //async.each(unsavedTubeData, function())
-        for(var k = 0; k < unsavedTubeData.length; k++){
-
-            (function(k){setTimeout(function(){
-                console.log(k)
-                for(var j = k + 1; j< unsavedTubeData.length; j++ ){
-                    console.log(k, j)
-                    routeSave(unsavedTubeData[k], unsavedTubeData[j])
-                }
-            }, 100)})(k)
-        }
-
-
-        //var processUsers = function(callback) {
-        //    getAllUsers(function(err, users) {
-        //        async.forEach(users, function(user, callback) {
-        //            getContactsOfUser(users.userId, function(err, contacts) {
-        //                async.forEach(unsavedTubeData, function(data, callback) {
-        //                    getPhonesOfContacts(contacts.contactId, function(err, phones) {
-        //                        contact.phones = phones;
-        //                        callback();
-        //                    });
-        //                }, function(err) {
-        //                    // All contacts are processed
-        //                    user.contacts = contacts;
-        //                    callback();
-        //                });
-        //            });
-        //        }, function(err) {
-        //            // All users are processed
-        //            // Here the finished result
-        //            callback(undefined, users);
-        //        });
-        //    });
-        //};
-        //
-        //processUsers(function(err, users) {
-        //    // users here
-        //});
-
-
-    }
-    //getRouteAndSave(data)
     calcRouteAndSaveToDB(data)
 
 });
 
 fs.createReadStream('data/London_tube_stations.csv').pipe(parser);
 
-
-//osrm.locate([52.4224,13.333086], function (err, result) {
-//    console.log(result);
-//    // Output: {"status":0,"mapped_coordinate":[52.422442,13.332101]}
-//});
 
 
 

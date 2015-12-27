@@ -1,5 +1,5 @@
 /**
- * Created by wwymak on 05/12/2015.
+ * Grunt file-- at the moment it only does the compiling from es6 to es5.
  */
 
 module.exports = function(grunt) {
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
                         expand: true,     // Enable dynamic expansion.
                         cwd: 'es6_js/',      // Src matches are relative to this path.
                         src: ['**/*.js'], // Actual pattern(s) to match.
-                        dest: 'js/',   // Destination path prefix.
+                        dest: 'public/js/',   // Destination path prefix.
                         ext: '.js',   // Dest filepaths will have this extension.
                     },
                 ]
