@@ -1,5 +1,7 @@
 /**
  * Express routes
+ * todo figure out what to do with the large datasets e.g. all-data which crashes thee routine as it runs out
+ * of memory...
  */
 
 var express  = require('express');
@@ -47,17 +49,31 @@ router.param('maxDist', function(req, res, next, dist) {
 });
 
 router.get('/api/maxDist/:maxDist', function(req, res, next){
+    //res.set('Content-Type', 'application/json')
     var dist = req.dist;
-    req.db.tubeRoutingColl.find({distance: {$lt: dist}})
-        .toArray(function(err, result){
-            if(err) return next(err);
-            var out = [];
-            result.forEach(function(doc){
-                doc.routePoints = polyline.decode(doc.routePoints, 6);
-                out.push(doc);
-            })
-            res.json(result);
-        });
+    var stream = req.db.tubeRoutingColl.find({distance: {$lt: +dist}}).stream();
+    var first = true;
+
+    stream.on('data', function(item) {
+        var prefix = first ? '' : ', ';
+        item.routePoints = polyline.decode(item.routePoints, 6);
+        res.write(prefix + JSON.stringify(item));
+        first = false;
+    });
+    stream.on('end', function() {
+        res.write(']}');
+        res.end();
+    });
+    //req.db.tubeRoutingColl.find({distance: {$lt: +dist}})
+    //    .toArray(function(err, result){
+    //        if(err) return next(err);
+    //        var out = [];
+    //        result.forEach(function(doc){
+    //            doc.routePoints = polyline.decode(doc.routePoints, 6);
+    //            out.push(doc);
+    //        })
+    //        res.json(result);
+    //    });
 
 });
 
@@ -68,7 +84,7 @@ router.param('minDist', function(req, res, next, dist) {
 
 router.get('/api/minDist/:minDist', function(req, res, next){
     var dist = req.dist;
-    req.db.tubeRoutingColl.find({distance: {$gt: dist}})
+    req.db.tubeRoutingColl.find({distance: {$gt: +dist}})
         .toArray(function(err, result){
             if(err) return next(err);
             var out = [];
@@ -87,7 +103,7 @@ router.param('distRange', function(req, res, next, dist) {
 });
 
 /**
- * exepct the minsRange to be e.g. 5-10
+ * exepct the disrRange to be e.g. 5-10
  */
 router.get('/api/distRange/:distRange', function(req, res, next){
     var maxMinArr = req.dist.split('-');
@@ -99,12 +115,7 @@ router.get('/api/distRange/:distRange', function(req, res, next){
             if(err) return next(err);
             var out = []
             result.forEach(function(doc){
-                doc.routePoints = polyline.decode(doc.routePoints, 6)
-                //.forEach(function(latLngArr){
-                //latLngArr.map(function(d){
-                //    return d/10 //not sure why but the polyline decod means every coord value is * 10...
-                //})
-                //})
+                doc.routePoints = polyline.decode(doc.routePoints, 6);
                 out.push(doc);
             })
             res.json(result);

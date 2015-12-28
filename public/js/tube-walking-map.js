@@ -11,7 +11,8 @@ var mapWidget = {
             container: 'map', // container id
             style: 'mapbox://styles/mapbox/emerald-v8', //stylesheet location
             center: [-0.1275, 51.5072], // starting position
-            zoom: 12 // starting zoom
+            zoom: 12, // starting zoom
+            minZoom: 9
         });
         return map;
     },
@@ -22,6 +23,15 @@ var mapWidget = {
      */
     loadFiveMinsData: function loadFiveMinsData() {
         return $.ajax('/api/five-mins-walk');
+    },
+
+    /**
+     *
+     * @param range e.g. 0.6-1.2 (in kms) for approx walking time of 5-10 mins
+     * @returns {*} jquery deferred
+     */
+    loadDataInDistanceRange: function loadDataInDistanceRange(range) {
+        return $.ajax('/api/distRange/' + range);
     },
 
     parseToGeojson: function parseToGeojson(data) {
@@ -70,35 +80,74 @@ var mapWidget = {
         }
 
         return geoJson;
-    }
-};
+    },
 
-var ldnMap = mapWidget.initMap();
+    addDataToMap: function addDataToMap() {
+        var map = arguments.length <= 0 || arguments[0] === undefined ? ldnMap : arguments[0];
+        var sourceName = arguments[1];
+        var geojson = arguments[2];
+        var lineColor = arguments[3];
+        var opacity = arguments.length <= 4 || arguments[4] === undefined ? 1 : arguments[4];
 
-ldnMap.on('style.load', function () {
-    mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson).then(function (geojson) {
-        console.log(JSON.stringify(geojson));
-        ldnMap.addSource("route", {
+        map.addSource(sourceName, {
             "type": "geojson",
             "data": geojson
         });
 
         ldnMap.addLayer({
-            "id": "route",
+            "id": sourceName,
             "type": "line",
-            "source": "route",
+            "source": sourceName,
             "interactive": true,
             "layout": {
                 "line-join": "round",
                 "line-cap": "round"
             },
             "paint": {
-                "line-color": "#888",
+                "line-color": lineColor,
                 "line-dasharray": [2, 2],
-                "line-width": { "stops": [[2, 0.5], [12, 2]] }
-                //"line-width": 2
+                "line-width": { "stops": [[2, 0.5], [12, 2]] },
+                "line-opacity": opacity
             }
         });
+    }
+};
+
+var ldnMap = mapWidget.initMap();
+
+ldnMap.on('style.load', function () {
+    //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
+    //    .then(function(geojson){
+    //        ldnMap.addSource("route5mins", {
+    //            "type": "geojson",
+    //            "data": geojson
+    //        });
+    //
+    //        ldnMap.addLayer({
+    //            "id": "route5mins",
+    //            "type": "line",
+    //            "source": "route5mins",
+    //            "interactive": true,
+    //            "layout": {
+    //                "line-join": "round",
+    //                "line-cap": "round"
+    //            },
+    //            "paint": {
+    //                "line-color": "#6e016b",
+    //                "line-dasharray": [2, 2],
+    //                "line-width": {"stops": [[2, 0.5], [12, 2]]}
+    //                //"line-width": 2
+    //            }
+    //        });
+    //    })
+
+    mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson).then(function (geojson) {
+        mapWidget.addDataToMap(ldnMap, "5-15mins", geojson, "#005a32", 0.5);
     });
+
+    //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
+    //    .then(function(geojson){
+    //        mapWidget.addDataToMap(ldnMap, "15-30mins", geojson, "#8c96c6")
+    //    })
 });
 //# sourceMappingURL=tube-walking-map.js.map

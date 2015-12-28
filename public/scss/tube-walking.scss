@@ -1,0 +1,40 @@
+body {
+  margin:0;
+  padding:0;
+}
+
+#map {
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100%;
+}
+
+.map-menu {
+  z-index: 100;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 3px;
+  width: 60px;
+
+  .btn {
+    width: 50px;
+    height: 50px;
+    background-size: 48px 48px;
+    background-color: white;
+    background-repeat: no-repeat;
+    outline: none;
+  }
+
+  .settings-btn {
+    @extend .btn;
+    background-image: url(../images/ic_settings_applications_black_48dp.png);
+  }
+  
+  .info-btn {
+    @extend .btn;
+    background-image: url("../images/ic_info_black_48dp.png");
+  }
+
+}
