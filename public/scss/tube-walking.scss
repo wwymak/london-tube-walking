@@ -14,14 +14,15 @@ body {
   z-index: 100;
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
+  bottom: 20px;
   border-radius: 3px;
-  width: 60px;
+  width: 40px;
 
   .btn {
-    width: 50px;
-    height: 50px;
-    background-size: 48px 48px;
+    width: 40px;
+    height: 40px;
+    background-size: 38px 38px;
     background-color: white;
     background-repeat: no-repeat;
     outline: none;
@@ -37,4 +38,43 @@ body {
     background-image: url("../images/ic_info_black_48dp.png");
   }
 
+  .close-btn {
+    @extend .btn;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: url("../images/ic_chevron_left_black_48dp.png");
+    display: none;
+    &.panel-active {
+      display: block;
+    }
+  }
+
+  .content {
+    width: 0px;
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: auto;
+    top: 0;
+    left: 40px;
+    bottom: 20px;
+    background-color: white;
+
+    .section {
+      width: 227px;
+      padding: 10px 20px;
+      display: none;
+      &.selected {
+        display: block;
+      }
+    }
+  }
+
+}
+
+.menu {
+  position: fixed;
+  z-index: 100;
+  background-color: #67b5d1;
+  transition: transform 0.3s;
 }

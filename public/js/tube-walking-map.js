@@ -17,6 +17,14 @@ var mapWidget = {
         return map;
     },
 
+    initControls: function initControls() {
+        $("#settingBtn").on('click', function () {
+            $("#map-panel").animate({ "width": 280 }, 500, 'easein', function () {
+                $("#closeMenuBtn").addClass('panel-active');
+            });
+        });
+    },
+
     /**
      * query db for tube stations data that are within five mins walk of each other
      * @returns {*} jquery deferred promise
@@ -114,6 +122,7 @@ var mapWidget = {
 };
 
 var ldnMap = mapWidget.initMap();
+mapWidget.initControls();
 
 ldnMap.on('style.load', function () {
     //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)

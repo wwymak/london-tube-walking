@@ -11,9 +11,27 @@
 </head>
 <body>
 <nav id="map-info-menu" class="map-menu">
-    <button class="settings-btn"></button>
-    <button class="info-btn"></button>
+    <div class="toolbar">
+        <button class="settings-btn" id="settingBtn"></button>
+        <button class="info-btn" id="infoBtn"></button>
+    </div>
+    <div class="content" id="map-panel">
+        <!--<div class="collapse" title="close this panel">-->
+            <button class="close-btn" id="closeMenuBtn"></button>
+        <!--</div>-->
+        <h5>Select your walking distance</h5>
+    </div>
+
 </nav>
+<!--<nav id="map-settings" class="menu menu&#45;&#45;slide-left">-->
+    <!--<button class="menu-close">&larr; Close Menu</button>-->
+    <!--<ul class="menu-selectors">-->
+        <!--<li class="menu-walkTime">Within 5 mins</li>-->
+        <!--<li class="menu-walkTime">5 -15 mins</li>-->
+        <!--<li class="menu-walkTime">15-30 mins</li>-->
+        <!--<li class="menu-walkTime">30 -60 mins</li>-->
+    <!--</ul>-->
+<!--</nav>-->
 <div id='map'></div>
 <script src="js/tube-walking-map.js"></script>
 </body>

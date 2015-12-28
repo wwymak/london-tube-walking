@@ -57,6 +57,11 @@ module.exports = function(grunt) {
                 },
             }
         },
+        //copy: {
+        //    main: {
+        //
+        //    }
+        //},
         watch: {
             scripts: {
                 files: ['es6_js/**/*.js', 'public/scss/*.scss'],

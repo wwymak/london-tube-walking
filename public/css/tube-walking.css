@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  padding: 0; }
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%; }
+
+.map-menu {
+  z-index: 100;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  bottom: 20px;
+  border-radius: 3px;
+  width: 40px; }
+  .map-menu .btn, .map-menu .settings-btn, .map-menu .info-btn, .map-menu .close-btn {
+    width: 40px;
+    height: 40px;
+    background-size: 38px 38px;
+    background-color: white;
+    background-repeat: no-repeat;
+    outline: none; }
+  .map-menu .settings-btn {
+    background-image: url(../images/ic_settings_applications_black_48dp.png); }
+  .map-menu .info-btn {
+    background-image: url("../images/ic_info_black_48dp.png"); }
+  .map-menu .close-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-image: url("../images/ic_chevron_left_black_48dp.png");
+    display: none; }
+    .map-menu .close-btn.panel-active {
+      display: block; }
+  .map-menu .content {
+    width: 0px;
+    position: absolute;
+    overflow-x: hidden;
+    overflow-y: auto;
+    top: 0;
+    left: 40px;
+    bottom: 20px;
+    background-color: white; }
+    .map-menu .content .section {
+      width: 227px;
+      padding: 10px 20px;
+      display: none; }
+      .map-menu .content .section.selected {
+        display: block; }
+
+.menu {
+  position: fixed;
+  z-index: 100;
+  background-color: #67b5d1;
+  transition: transform 0.3s; }
+
+/*# sourceMappingURL=tube-walking.css.map */
