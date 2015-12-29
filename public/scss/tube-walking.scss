@@ -26,6 +26,7 @@ body {
     background-color: white;
     background-repeat: no-repeat;
     outline: none;
+    border: none;
   }
 
   .settings-btn {
@@ -41,8 +42,9 @@ body {
   .close-btn {
     @extend .btn;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 5px;
+    right: 5px;
+    padding: 10px;
     background-image: url("../images/ic_chevron_left_black_48dp.png");
     display: none;
     &.panel-active {
@@ -50,15 +52,22 @@ body {
     }
   }
 
+  .map-panel {
+    padding:1%;
+    display:inline;
+  }
+
   .content {
+    overflow:hidden;
+    white-space:nowrap;
+    display:inline-block;
     width: 0px;
     position: absolute;
-    overflow-x: hidden;
-    overflow-y: auto;
     top: 0;
     left: 40px;
     bottom: 20px;
     background-color: white;
+    opacity: 0.8;
 
     .section {
       width: 227px;
@@ -67,6 +76,11 @@ body {
       &.selected {
         display: block;
       }
+    }
+
+    h3 {
+      padding: 15px;
+      margin: 0;
     }
   }
 

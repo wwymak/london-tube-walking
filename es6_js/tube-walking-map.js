@@ -17,10 +17,16 @@ var mapWidget = {
 
     initControls: function() {
         $("#settingBtn").on('click', () =>{
-            $("#map-panel").animate({"width": 280}, 500, 'easein', function(){
-                $("#closeMenuBtn").addClass('panel-active')
+            $("#map-panel-content").animate({"width": 280}, 500, () => {
+                $("#closeMenuBtn").addClass('panel-active');
             });
-        })
+        });
+
+        $("#closeMenuBtn").on('click', () =>{
+            $("#map-panel-content").animate({"width": 0}, 500, () =>{
+                $("#closeMenuBtn").removeClass('panel-active');
+            });
+        });
     },
 
     /**

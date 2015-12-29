@@ -19,8 +19,14 @@ var mapWidget = {
 
     initControls: function initControls() {
         $("#settingBtn").on('click', function () {
-            $("#map-panel").animate({ "width": 280 }, 500, 'easein', function () {
+            $("#map-panel-content").animate({ "width": 280 }, 500, function () {
                 $("#closeMenuBtn").addClass('panel-active');
+            });
+        });
+
+        $("#closeMenuBtn").on('click', function () {
+            $("#map-panel-content").animate({ "width": 0 }, 500, function () {
+                $("#closeMenuBtn").removeClass('panel-active');
             });
         });
     },

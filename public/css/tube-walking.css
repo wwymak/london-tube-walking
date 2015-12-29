@@ -22,34 +22,44 @@ body {
     background-size: 38px 38px;
     background-color: white;
     background-repeat: no-repeat;
-    outline: none; }
+    outline: none;
+    border: none; }
   .map-menu .settings-btn {
     background-image: url(../images/ic_settings_applications_black_48dp.png); }
   .map-menu .info-btn {
     background-image: url("../images/ic_info_black_48dp.png"); }
   .map-menu .close-btn {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 5px;
+    right: 5px;
+    padding: 10px;
     background-image: url("../images/ic_chevron_left_black_48dp.png");
     display: none; }
     .map-menu .close-btn.panel-active {
       display: block; }
+  .map-menu .map-panel {
+    padding: 1%;
+    display: inline; }
   .map-menu .content {
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
     width: 0px;
     position: absolute;
-    overflow-x: hidden;
-    overflow-y: auto;
     top: 0;
     left: 40px;
     bottom: 20px;
-    background-color: white; }
+    background-color: white;
+    opacity: 0.8; }
     .map-menu .content .section {
       width: 227px;
       padding: 10px 20px;
       display: none; }
       .map-menu .content .section.selected {
         display: block; }
+    .map-menu .content h3 {
+      padding: 15px;
+      margin: 0; }
 
 .menu {
   position: fixed;
