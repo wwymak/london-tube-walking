@@ -36,21 +36,21 @@ var mapWidget = {
             mapWidget.mapLayerIDs.forEach(function (d) {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none");
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "none");
+            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "visible");
         });
 
         $("#less15minsBtn").on('click', function () {
             mapWidget.mapLayerIDs.forEach(function (d) {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none");
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "none");
+            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
         });
 
         $("#less30minsBtn").on('click', function () {
             mapWidget.mapLayerIDs.forEach(function (d) {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none");
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "none");
+            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "visible");
         });
     },
 
