@@ -34,21 +34,21 @@ var mapWidget = {
             mapWidget.mapLayerIDs.forEach(d => {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none")
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "none")
+            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "visible")
         });
 
         $("#less15minsBtn").on('click', () => {
           mapWidget.mapLayerIDs.forEach(d => {
               mapWidget.showOrHIdeLayer(ldnMap, d, "none")
           });
-          mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "none")
+          mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible")
         })
 
         $("#less30minsBtn").on('click', () => {
             mapWidget.mapLayerIDs.forEach(d => {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none")
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "none")
+            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "visible")
         })
     },
 
@@ -106,7 +106,6 @@ var mapWidget = {
             "type": "line",
             "source": sourceName,
             "interactive": true,
-            "visibility": "none",
             "layout": {
                 "line-join": "round",
                 "line-cap": "round",
@@ -120,6 +119,8 @@ var mapWidget = {
         });
 
         mapWidget.mapLayerIDs.push(sourceName);
+
+        mapWidget.showOrHIdeLayer(ldnMap, sourceName, "none");
     },
 
     /**
@@ -140,7 +141,7 @@ ldnMap.on('style.load', () =>{
     mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
         .then(function(geojson){
         mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
-    }).then(mapWidget.showOrHIdeLayer(ldnMap, "less5mins"));
+    })
     //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
     //    .then(function(geojson){
     //        ldnMap.addSource("route5mins", {

@@ -14,10 +14,9 @@ var mapWidget = {
             zoom: 12, // starting zoom
             minZoom: 9
         });
+        mapWidget.mapLayerIDs = [];
         return map;
     },
-
-    mapLayerIDs: [],
 
     initControls: function initControls() {
         $("#settingBtn").on('click', function () {
@@ -33,6 +32,7 @@ var mapWidget = {
         });
 
         $("#less5minsBtn").on('click', function () {
+            console.log("clikc");
             mapWidget.mapLayerIDs.forEach(function (d) {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none");
             });
@@ -140,12 +140,13 @@ var mapWidget = {
                 "line-color": lineColor,
                 "line-dasharray": [2, 2],
                 "line-width": { "stops": [[2, 0.5], [12, 2]] },
-                "line-opacity": opacity,
-                "visibility": "none"
+                "line-opacity": opacity
             }
         });
 
         mapWidget.mapLayerIDs.push(sourceName);
+
+        mapWidget.showOrHIdeLayer(ldnMap, sourceName, "none");
     },
 
     /**
@@ -162,12 +163,11 @@ var mapWidget = {
 };
 
 var ldnMap = mapWidget.initMap();
-mapWidget.initControls();
 
 ldnMap.on('style.load', function () {
     mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson).then(function (geojson) {
         mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8);
-    }).then(mapWidget.showOrHIdeLayer(ldnMap, "less5mins"));
+    });
     //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
     //    .then(function(geojson){
     //        ldnMap.addSource("route5mins", {
@@ -200,5 +200,7 @@ ldnMap.on('style.load', function () {
     mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson).then(function (geojson) {
         mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6");
     });
+
+    mapWidget.initControls();
 });
 //# sourceMappingURL=tube-walking-map.js.map
