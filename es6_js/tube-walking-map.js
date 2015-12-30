@@ -141,31 +141,7 @@ ldnMap.on('style.load', () =>{
     mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
         .then(function(geojson){
         mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
-    })
-    //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
-    //    .then(function(geojson){
-    //        ldnMap.addSource("route5mins", {
-    //            "type": "geojson",
-    //            "data": geojson
-    //        });
-    //
-    //        ldnMap.addLayer({
-    //            "id": "route5mins",
-    //            "type": "line",
-    //            "source": "route5mins",
-    //            "interactive": true,
-    //            "layout": {
-    //                "line-join": "round",
-    //                "line-cap": "round"
-    //            },
-    //            "paint": {
-    //                "line-color": "#6e016b",
-    //                "line-dasharray": [2, 2],
-    //                "line-width": {"stops": [[2, 0.5], [12, 2]]}
-    //                //"line-width": 2
-    //            }
-    //        });
-    //    })
+    });
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson)
         .then(function(geojson){
@@ -178,5 +154,7 @@ ldnMap.on('style.load', () =>{
         })
 
     mapWidget.initControls();
+
+    mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
 
 });
