@@ -15,6 +15,22 @@ var mapWidget = {
             minZoom: 9
         });
         mapWidget.mapLayerIDs = [];
+
+        //mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
+        //    });
+        //
+        //mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5)
+        //    });
+        //
+        //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6")
+        //    })
+
         return map;
     },
 
@@ -177,8 +193,10 @@ ldnMap.on('style.load', function () {
         mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6");
     });
 
+    ldnMap.on('load', function () {
+        console.log(ldnMap.loaded());
+        mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+    });
     mapWidget.initControls();
-
-    mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
 });
 //# sourceMappingURL=tube-walking-map.js.map
