@@ -12,6 +12,7 @@ var mapWidget = {
             zoom: 12, // starting zoom
             minZoom: 9
         });
+        mapWidget.mapLayerIDs = [];
         return map;
     },
 
@@ -27,6 +28,28 @@ var mapWidget = {
                 $("#closeMenuBtn").removeClass('panel-active');
             });
         });
+
+        $("#less5minsBtn").on('click', () => {
+            console.log("clikc")
+            mapWidget.mapLayerIDs.forEach(d => {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none")
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "none")
+        });
+
+        $("#less15minsBtn").on('click', () => {
+          mapWidget.mapLayerIDs.forEach(d => {
+              mapWidget.showOrHIdeLayer(ldnMap, d, "none")
+          });
+          mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "none")
+        })
+
+        $("#less30minsBtn").on('click', () => {
+            mapWidget.mapLayerIDs.forEach(d => {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none")
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "none")
+        })
     },
 
     /**
@@ -72,7 +95,7 @@ var mapWidget = {
         return geoJson;
     },
 
-    addDataToMap: function (map = ldnMap, sourceName, geojson, lineColor, opacity = 1) {
+    addDataToMap: function (map, sourceName, geojson, lineColor, opacity = 1) {
         map.addSource(sourceName, {
             "type": "geojson",
             "data": geojson
@@ -83,24 +106,41 @@ var mapWidget = {
             "type": "line",
             "source": sourceName,
             "interactive": true,
+            "visibility": "none",
             "layout": {
                 "line-join": "round",
-                "line-cap": "round"
+                "line-cap": "round",
             },
             "paint": {
                 "line-color": lineColor,
                 "line-dasharray": [2, 2],
                 "line-width": {"stops": [[2, 0.5], [12, 2]]},
-                "line-opacity": opacity
+                "line-opacity": opacity,
             }
         });
+
+        mapWidget.mapLayerIDs.push(sourceName);
+    },
+
+    /**
+     *
+     * @param map
+     * @param layerID -- maplayer id as specified in addLayer
+     * @param show -- 'visible' or 'none'
+     */
+    showOrHIdeLayer: function(map, layerID, show = 'visible'){
+        map.setLayoutProperty(layerID, 'visibility', show);
     }
 };
 
 var ldnMap = mapWidget.initMap();
-mapWidget.initControls();
+
 
 ldnMap.on('style.load', () =>{
+    mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
+        .then(function(geojson){
+        mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
+    }).then(mapWidget.showOrHIdeLayer(ldnMap, "less5mins"));
     //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
     //    .then(function(geojson){
     //        ldnMap.addSource("route5mins", {
@@ -128,11 +168,14 @@ ldnMap.on('style.load', () =>{
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson)
         .then(function(geojson){
-            mapWidget.addDataToMap(ldnMap, "5-15mins", geojson, "#005a32", 0.5)
+            mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5)
         });
 
-    //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
-    //    .then(function(geojson){
-    //        mapWidget.addDataToMap(ldnMap, "15-30mins", geojson, "#8c96c6")
-    //    })
+    mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
+        .then(function(geojson){
+            mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6")
+        })
+
+    mapWidget.initControls();
+
 });

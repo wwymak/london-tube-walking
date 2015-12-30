@@ -17,6 +17,8 @@ var mapWidget = {
         return map;
     },
 
+    mapLayerIDs: [],
+
     initControls: function initControls() {
         $("#settingBtn").on('click', function () {
             $("#map-panel-content").animate({ "width": 280 }, 500, function () {
@@ -28,6 +30,27 @@ var mapWidget = {
             $("#map-panel-content").animate({ "width": 0 }, 500, function () {
                 $("#closeMenuBtn").removeClass('panel-active');
             });
+        });
+
+        $("#less5minsBtn").on('click', function () {
+            mapWidget.mapLayerIDs.forEach(function (d) {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none");
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "none");
+        });
+
+        $("#less15minsBtn").on('click', function () {
+            mapWidget.mapLayerIDs.forEach(function (d) {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none");
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "none");
+        });
+
+        $("#less30minsBtn").on('click', function () {
+            mapWidget.mapLayerIDs.forEach(function (d) {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none");
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "none");
         });
     },
 
@@ -96,11 +119,7 @@ var mapWidget = {
         return geoJson;
     },
 
-    addDataToMap: function addDataToMap() {
-        var map = arguments.length <= 0 || arguments[0] === undefined ? ldnMap : arguments[0];
-        var sourceName = arguments[1];
-        var geojson = arguments[2];
-        var lineColor = arguments[3];
+    addDataToMap: function addDataToMap(map, sourceName, geojson, lineColor) {
         var opacity = arguments.length <= 4 || arguments[4] === undefined ? 1 : arguments[4];
 
         map.addSource(sourceName, {
@@ -121,9 +140,24 @@ var mapWidget = {
                 "line-color": lineColor,
                 "line-dasharray": [2, 2],
                 "line-width": { "stops": [[2, 0.5], [12, 2]] },
-                "line-opacity": opacity
+                "line-opacity": opacity,
+                "visibility": "none"
             }
         });
+
+        mapWidget.mapLayerIDs.push(sourceName);
+    },
+
+    /**
+     *
+     * @param map
+     * @param layerID -- maplayer id as specified in addLayer
+     * @param show -- 'visible' or 'none'
+     */
+    showOrHIdeLayer: function showOrHIdeLayer(map, layerID) {
+        var show = arguments.length <= 2 || arguments[2] === undefined ? 'visible' : arguments[2];
+
+        map.setLayoutProperty(layerID, 'visibility', show);
     }
 };
 
@@ -131,6 +165,9 @@ var ldnMap = mapWidget.initMap();
 mapWidget.initControls();
 
 ldnMap.on('style.load', function () {
+    mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson).then(function (geojson) {
+        mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8);
+    }).then(mapWidget.showOrHIdeLayer(ldnMap, "less5mins"));
     //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
     //    .then(function(geojson){
     //        ldnMap.addSource("route5mins", {
@@ -157,12 +194,11 @@ ldnMap.on('style.load', function () {
     //    })
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson).then(function (geojson) {
-        mapWidget.addDataToMap(ldnMap, "5-15mins", geojson, "#005a32", 0.5);
+        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5);
     });
 
-    //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
-    //    .then(function(geojson){
-    //        mapWidget.addDataToMap(ldnMap, "15-30mins", geojson, "#8c96c6")
-    //    })
+    mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson).then(function (geojson) {
+        mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6");
+    });
 });
 //# sourceMappingURL=tube-walking-map.js.map

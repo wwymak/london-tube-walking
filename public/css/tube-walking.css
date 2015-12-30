@@ -60,6 +60,9 @@ body {
     .map-menu .content h3 {
       padding: 15px;
       margin: 0; }
+    .map-menu .content .layer-selector {
+      cursor: pointer;
+      padding: 10px; }
 
 .menu {
   position: fixed;
