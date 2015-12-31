@@ -199,8 +199,9 @@ ldnMap.on('style.load', () =>{
             mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5, "visible");
 
         }).then(function(){
-        $("#initLoadingScreen").addClass("inactive");
-    });
+            $("#initLoadingScreen").addClass("inactive");
+            $("#infoLightBox").removeClass("inactive")
+        });
 
     mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
         .then(function(geojson){
