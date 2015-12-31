@@ -148,6 +148,7 @@ var mapWidget = {
 
     addDataToMap: function addDataToMap(map, sourceName, geojson, lineColor) {
         var opacity = arguments.length <= 4 || arguments[4] === undefined ? 1 : arguments[4];
+        var visibility = arguments.length <= 5 || arguments[5] === undefined ? "none" : arguments[5];
 
         map.addSource(sourceName, {
             "type": "geojson",
@@ -173,7 +174,7 @@ var mapWidget = {
 
         mapWidget.mapLayerIDs.push(sourceName);
 
-        mapWidget.showOrHIdeLayer(ldnMap, sourceName, "none");
+        mapWidget.showOrHIdeLayer(ldnMap, sourceName, visibility);
     },
 
     /**
@@ -197,13 +198,7 @@ ldnMap.on('style.load', function () {
     });
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson).then(function (geojson) {
-        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5);
-        ldnMap.on('load', function () {
-            console.log(ldnMap.loaded());
-
-            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
-            //mapWidget.initControls();
-        });
+        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5, "visible");
     });
 
     mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson).then(function (geojson) {
