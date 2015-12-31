@@ -1,3 +1,7 @@
+$walk-short-color: #dd3497;
+$walk-med-color: #005a32;
+$walk-long-color: #8c96c6;
+
 body {
   margin:0;
   padding:0;
@@ -17,26 +21,40 @@ body {
   left: 20px;
   bottom: 20px;
   border-radius: 3px;
-  width: 40px;
+  width: 50px;
+  background-color: white;
 
   .btn {
-    width: 40px;
-    height: 40px;
-    background-size: 38px 38px;
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
     background-color: white;
     background-repeat: no-repeat;
     outline: none;
     border: none;
+    cursor: pointer;
+    &.btn-selected {
+      background-color: #406cff;
+    }
   }
 
   .settings-btn {
     @extend .btn;
-    background-image: url(../images/ic_settings_applications_black_48dp.png);
+    background-image: url("../images/ic_settings_applications_black_48dp.png");
+
+    &.btn-selected {
+      background-image: url("../images/ic_settings_applications_white_48dp.png");
+    }
   }
   
   .info-btn {
     @extend .btn;
     background-image: url("../images/ic_info_black_48dp.png");
+
+    //&.btn-selected {
+    //  background-image: url("../images/ic_info__white_48dp.png");
+    //}
   }
 
   .close-btn {
@@ -52,6 +70,14 @@ body {
     }
   }
 
+  .search-btn{
+    @extend .btn;
+    background-image: url("../images/ic_search_black_48dp.png");
+    &.btn-selected {
+      background-image: url("../images/ic_search_white_48dp.png");
+    }
+  }
+
   .map-panel {
     padding:1%;
     display:inline;
@@ -64,10 +90,18 @@ body {
     width: 280px;
     position: absolute;
     top: 0;
-    left: 40px;
+    left: 50px;
     bottom: 20px;
     background-color: white;
     opacity: 0.8;
+
+    .content-active {
+      display: block;
+    }
+
+    .content-inactive {
+      display: none;
+    }
 
     .section {
       width: 227px;
@@ -86,6 +120,21 @@ body {
     .layer-selector {
       cursor: pointer;
       padding: 10px;
+      &.selected {
+        color: whitesmoke;
+      }
+    }
+
+    .walk-short-sel.selected {
+      background-color: $walk-short-color;
+    }
+
+    .walk-med-sel.selected {
+      background-color: $walk-med-color;
+    }
+
+    .walk-long-sel.selected {
+      background-color: $walk-long-color;
     }
   }
 

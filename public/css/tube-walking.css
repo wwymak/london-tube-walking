@@ -15,17 +15,24 @@ body {
   left: 20px;
   bottom: 20px;
   border-radius: 3px;
-  width: 40px; }
-  .map-menu .btn, .map-menu .settings-btn, .map-menu .info-btn, .map-menu .close-btn {
-    width: 40px;
-    height: 40px;
-    background-size: 38px 38px;
+  width: 50px;
+  background-color: white; }
+  .map-menu .btn, .map-menu .settings-btn, .map-menu .info-btn, .map-menu .close-btn, .map-menu .search-btn {
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    background-size: 50px 50px;
     background-color: white;
     background-repeat: no-repeat;
     outline: none;
-    border: none; }
+    border: none;
+    cursor: pointer; }
+    .map-menu .btn.btn-selected, .map-menu .btn-selected.settings-btn, .map-menu .btn-selected.info-btn, .map-menu .btn-selected.close-btn, .map-menu .btn-selected.search-btn {
+      background-color: #406cff; }
   .map-menu .settings-btn {
-    background-image: url(../images/ic_settings_applications_black_48dp.png); }
+    background-image: url("../images/ic_settings_applications_black_48dp.png"); }
+    .map-menu .settings-btn.btn-selected {
+      background-image: url("../images/ic_settings_applications_white_48dp.png"); }
   .map-menu .info-btn {
     background-image: url("../images/ic_info_black_48dp.png"); }
   .map-menu .close-btn {
@@ -37,6 +44,10 @@ body {
     display: none; }
     .map-menu .close-btn.panel-active {
       display: block; }
+  .map-menu .search-btn {
+    background-image: url("../images/ic_search_black_48dp.png"); }
+    .map-menu .search-btn.btn-selected {
+      background-image: url("../images/ic_search_white_48dp.png"); }
   .map-menu .map-panel {
     padding: 1%;
     display: inline; }
@@ -47,10 +58,14 @@ body {
     width: 280px;
     position: absolute;
     top: 0;
-    left: 40px;
+    left: 50px;
     bottom: 20px;
     background-color: white;
     opacity: 0.8; }
+    .map-menu .content .content-active {
+      display: block; }
+    .map-menu .content .content-inactive {
+      display: none; }
     .map-menu .content .section {
       width: 227px;
       padding: 10px 20px;
@@ -63,6 +78,14 @@ body {
     .map-menu .content .layer-selector {
       cursor: pointer;
       padding: 10px; }
+      .map-menu .content .layer-selector.selected {
+        color: whitesmoke; }
+    .map-menu .content .walk-short-sel.selected {
+      background-color: #dd3497; }
+    .map-menu .content .walk-med-sel.selected {
+      background-color: #005a32; }
+    .map-menu .content .walk-long-sel.selected {
+      background-color: #8c96c6; }
 
 .menu {
   position: fixed;

@@ -45,27 +45,32 @@ var mapWidget = {
             });
         });
 
-        $("#less5minsBtn").on('click', () => {
-            console.log("clikc")
+        $("#less5minsBtn").on('click', (e) => {
             mapWidget.mapLayerIDs.forEach(d => {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none")
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "visible")
+            mapWidget.showOrHIdeLayer(ldnMap, "less5mins", "visible");
+            $(".layer-selector").each((d, el) => $(el).removeClass("selected"));
+            $(e.currentTarget).addClass("selected");
         });
 
-        $("#less15minsBtn").on('click', () => {
-          mapWidget.mapLayerIDs.forEach(d => {
-              mapWidget.showOrHIdeLayer(ldnMap, d, "none")
-          });
-          mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible")
-        })
-
-        $("#less30minsBtn").on('click', () => {
+        $("#less15minsBtn").on('click', (e) => {
             mapWidget.mapLayerIDs.forEach(d => {
                 mapWidget.showOrHIdeLayer(ldnMap, d, "none")
             });
-            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "visible")
-        })
+            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+            $(".layer-selector").each((d, el) => $(el).removeClass("selected"));
+            $(e.currentTarget).addClass("selected");
+        });
+
+        $("#less30minsBtn").on('click', (e) => {
+            mapWidget.mapLayerIDs.forEach(d => {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none");
+            });
+            mapWidget.showOrHIdeLayer(ldnMap, "less30mins", "visible");
+            $(".layer-selector").each((d, el) => $(el).removeClass("selected"));
+            $(e.currentTarget).addClass("selected");
+        });
     },
 
     /**

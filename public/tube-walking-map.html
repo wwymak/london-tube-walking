@@ -12,31 +12,27 @@
 <body>
 <nav id="map-info-menu" class="map-menu">
     <div class="toolbar">
-        <button class="settings-btn" id="settingBtn"></button>
+        <button class="settings-btn btn-selected" id="settingBtn"></button>
+        <button class="search-btn" id="searchBtn"></button>
         <button class="info-btn" id="infoBtn"></button>
     </div>
     <div class="map-panel">
         <div class="content" id="map-panel-content">
-            <!--<div class="collapse" title="close this panel">-->
-                <button class="close-btn panel-active" id="closeMenuBtn"></button>
-            <!--</div>-->
-            <h3>Walking distance</h3>
-            <div class="layer-selector" id="less5minsBtn"> 0 - 0.6km (within 5 mins)</div>
-            <div class="layer-selector" id="less15minsBtn"> 0.6-1.8km (within 15 mins)</div>
-            <div class="layer-selector" id="less30minsBtn"> 1.8 - 3.6km (within 30 mins)</div>
+            <button class="close-btn panel-active" id="closeMenuBtn"></button>
+            <div class="content-active" id="routes-all-selector">
+                <h3>Walking distance</h3>
+                <div class="layer-selector walk-short-sel" id="less5minsBtn"> 0 - 0.6km (within 5 mins)</div>
+                <div class="layer-selector walk-med-sel selected" id="less15minsBtn"> 0.6-1.8km (within 15 mins)</div>
+                <div class="layer-selector walk-long-sel" id="less30minsBtn"> 1.8 - 3.6km (within 30 mins)</div>
+            </div>
+            <div id="search-routes" class="content-inactive">
+                <h3>Find a route</h3>
+
+            </div>
         </div>
     </div>
 
 </nav>
-<!--<nav id="map-settings" class="menu menu&#45;&#45;slide-left">-->
-    <!--<button class="menu-close">&larr; Close Menu</button>-->
-    <!--<ul class="menu-selectors">-->
-        <!--<li class="menu-walkTime">Within 5 mins</li>-->
-        <!--<li class="menu-walkTime">5 -15 mins</li>-->
-        <!--<li class="menu-walkTime">15-30 mins</li>-->
-        <!--<li class="menu-walkTime">30 -60 mins</li>-->
-    <!--</ul>-->
-<!--</nav>-->
 <div id='map'></div>
 <script src="js/tube-walking-map.js"></script>
 </body>
