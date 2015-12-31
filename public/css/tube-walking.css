@@ -8,6 +8,20 @@ body {
   bottom: 0;
   width: 100%; }
 
+.icon-btn, .info .close-info-btn {
+  padding: 5px;
+  width: 50px;
+  height: 50px;
+  background-size: 40px 40px;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  outline: none;
+  border: none;
+  cursor: pointer; }
+  .icon-btn.btn-selected, .info .btn-selected.close-info-btn {
+    background-color: lightgray; }
+
 .map-menu {
   z-index: 100;
   position: absolute;
@@ -21,20 +35,23 @@ body {
     padding: 5px;
     width: 50px;
     height: 50px;
-    background-size: 50px 50px;
+    background-size: 40px 40px;
     background-color: white;
     background-repeat: no-repeat;
+    background-position: center;
     outline: none;
     border: none;
     cursor: pointer; }
     .map-menu .btn.btn-selected, .map-menu .btn-selected.settings-btn, .map-menu .btn-selected.info-btn, .map-menu .btn-selected.close-btn, .map-menu .btn-selected.search-btn {
-      background-color: #406cff; }
+      background-color: lightgray; }
   .map-menu .settings-btn {
     background-image: url("../images/ic_settings_applications_black_48dp.png"); }
     .map-menu .settings-btn.btn-selected {
       background-image: url("../images/ic_settings_applications_white_48dp.png"); }
   .map-menu .info-btn {
     background-image: url("../images/ic_info_black_48dp.png"); }
+    .map-menu .info-btn.btn-selected {
+      background-image: url("../images/ic_info_white_48dp.png"); }
   .map-menu .close-btn {
     position: absolute;
     top: 5px;
@@ -92,5 +109,41 @@ body {
   z-index: 100;
   background-color: #67b5d1;
   transition: transform 0.3s; }
+
+.centered, .info {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%); }
+
+.inactive {
+  display: none; }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 200;
+  background: grey;
+  opacity: 0.5; }
+
+.info {
+  z-index: 300;
+  width: 60vw;
+  height: auto;
+  background: white;
+  padding: 50px;
+  opacity: 1; }
+  .info .close-info-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    background-image: url("../images/ic_cancel_black_48dp.png"); }
+
+.position-rel {
+  position: relative; }
 
 /*# sourceMappingURL=tube-walking.css.map */

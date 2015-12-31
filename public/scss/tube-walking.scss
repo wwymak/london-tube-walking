@@ -14,6 +14,22 @@ body {
   width:100%;
 }
 
+.icon-btn {
+  padding: 5px;
+  width: 50px;
+  height: 50px;
+  background-size: 40px 40px;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  &.btn-selected {
+    background-color: lightgray;
+  }
+}
+
 .map-menu {
   z-index: 100;
   position: absolute;
@@ -28,14 +44,15 @@ body {
     padding: 5px;
     width: 50px;
     height: 50px;
-    background-size: 50px 50px;
+    background-size: 40px 40px;
     background-color: white;
     background-repeat: no-repeat;
+    background-position: center;
     outline: none;
     border: none;
     cursor: pointer;
     &.btn-selected {
-      background-color: #406cff;
+      background-color: lightgray;
     }
   }
 
@@ -52,9 +69,9 @@ body {
     @extend .btn;
     background-image: url("../images/ic_info_black_48dp.png");
 
-    //&.btn-selected {
-    //  background-image: url("../images/ic_info__white_48dp.png");
-    //}
+    &.btn-selected {
+      background-image: url("../images/ic_info_white_48dp.png");
+    }
   }
 
   .close-btn {
@@ -145,4 +162,50 @@ body {
   z-index: 100;
   background-color: #67b5d1;
   transition: transform 0.3s;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.inactive {
+  display: none;
+}
+
+.overlay {
+  position:absolute;
+  top:0;
+  bottom:0;
+  width:100vw;
+  height: 100vh;
+  z-index: 200;
+  background: grey;
+  opacity: 0.5;
+
+}
+
+.info {
+  @extend .centered;
+  z-index: 300;
+  width: 60vw;
+  height: auto;
+  background: white;
+  padding: 50px;
+  opacity: 1;
+
+  .close-info-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    @extend .icon-btn;
+    background-image: url("../images/ic_cancel_black_48dp.png");
+  }
+}
+
+.position-rel {
+  position: relative;
 }

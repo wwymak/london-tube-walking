@@ -33,16 +33,46 @@ var mapWidget = {
     },
 
     initControls: function() {
-        $("#settingBtn").on('click', () =>{
+        $("#settingBtn").on('click', (e) =>{
+            $(".toolbar").find(".btn-selected").removeClass("btn-selected");
+            $(e.currentTarget).addClass("btn-selected");
+            $("#map-panel-content").animate({"width": 280}, 500, () => {
+                $("#closeMenuBtn").addClass('panel-active');
+            });
+        });
+
+        $("#searchBtn").on('click', (e) =>{
+            $(".toolbar").find(".btn-selected").removeClass("btn-selected");
+            $(e.currentTarget).addClass("btn-selected");
             $("#map-panel-content").animate({"width": 280}, 500, () => {
                 $("#closeMenuBtn").addClass('panel-active');
             });
         });
 
         $("#closeMenuBtn").on('click', () =>{
+            $(".toolbar").find(".btn-selected").removeClass("btn-selected");
             $("#map-panel-content").animate({"width": 0}, 500, () =>{
                 $("#closeMenuBtn").removeClass('panel-active');
             });
+        });
+
+        $("#infoBtn").on("click", (e) => {
+            $(".toolbar").find(".btn-selected").removeClass("btn-selected");
+            $(e.currentTarget).addClass("btn-selected");
+            $("#infoLightBox").show();
+            $("#closeMenuBtn").trigger("click");
+        });
+
+        $(document).on('keyup', (e) => {
+            if(e.keyCode == 27){
+                $("#infoLightBox").hide();
+                $("#infoBtn").removeClass("btn-selected");
+            }
+        });
+
+        $("#closeLightBoxBtn").on("click", ()=>{
+            $("#infoLightBox").hide();
+            $("#infoBtn").removeClass("btn-selected");
         });
 
         $("#less5minsBtn").on('click', (e) => {
