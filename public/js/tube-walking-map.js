@@ -198,6 +198,12 @@ ldnMap.on('style.load', function () {
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson).then(function (geojson) {
         mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5);
+        ldnMap.on('load', function () {
+            console.log(ldnMap.loaded());
+
+            mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+            //mapWidget.initControls();
+        });
     });
 
     mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson).then(function (geojson) {
@@ -205,9 +211,9 @@ ldnMap.on('style.load', function () {
     });
 
     ldnMap.on('load', function () {
-        console.log(ldnMap.loaded());
-        mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+
+        //mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+        mapWidget.initControls();
     });
-    mapWidget.initControls();
 });
 //# sourceMappingURL=tube-walking-map.js.map
