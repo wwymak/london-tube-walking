@@ -15,6 +15,22 @@ var mapWidget = {
             minZoom: 9
         });
         mapWidget.mapLayerIDs = [];
+
+        //mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
+        //    });
+        //
+        //mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5)
+        //    });
+        //
+        //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
+        //    .then(function(geojson){
+        //        mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6")
+        //    })
+
         return map;
     },
 
@@ -168,30 +184,6 @@ ldnMap.on('style.load', function () {
     mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson).then(function (geojson) {
         mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8);
     });
-    //mapWidget.loadFiveMinsData().then(mapWidget.parseToGeojson)
-    //    .then(function(geojson){
-    //        ldnMap.addSource("route5mins", {
-    //            "type": "geojson",
-    //            "data": geojson
-    //        });
-    //
-    //        ldnMap.addLayer({
-    //            "id": "route5mins",
-    //            "type": "line",
-    //            "source": "route5mins",
-    //            "interactive": true,
-    //            "layout": {
-    //                "line-join": "round",
-    //                "line-cap": "round"
-    //            },
-    //            "paint": {
-    //                "line-color": "#6e016b",
-    //                "line-dasharray": [2, 2],
-    //                "line-width": {"stops": [[2, 0.5], [12, 2]]}
-    //                //"line-width": 2
-    //            }
-    //        });
-    //    })
 
     mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson).then(function (geojson) {
         mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5);
@@ -201,6 +193,10 @@ ldnMap.on('style.load', function () {
         mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6");
     });
 
+    ldnMap.on('load', function () {
+        console.log(ldnMap.loaded());
+        mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
+    });
     mapWidget.initControls();
 });
 //# sourceMappingURL=tube-walking-map.js.map
