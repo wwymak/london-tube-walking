@@ -1,10 +1,16 @@
+//noinspection CssUnknownTarget
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
 $walk-short-color: #dd3497;
 $walk-med-color: #005a32;
 $walk-long-color: #8c96c6;
+$font-stack: 'Open Sans', sans-serif;
 
 body {
   margin:0;
   padding:0;
+  font-family: $font-stack;
+  font-size: 15px;
 }
 
 #map {
@@ -30,6 +36,16 @@ body {
   }
 }
 
+.btn {
+  font-family: inherit;
+  font-size: inherit;
+  border-radius: 5px;
+  padding: 5px;
+  outline: none;
+  background-color: #005a32;
+  color: white;
+}
+
 .map-menu {
   z-index: 100;
   position: absolute;
@@ -39,25 +55,25 @@ body {
   border-radius: 3px;
   width: 50px;
   background-color: white;
-
-  .btn {
-    padding: 5px;
-    width: 50px;
-    height: 50px;
-    background-size: 40px 40px;
-    background-color: white;
-    background-repeat: no-repeat;
-    background-position: center;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    &.btn-selected {
-      background-color: lightgray;
-    }
-  }
+  //
+  //.btn {
+  //  padding: 5px;
+  //  width: 50px;
+  //  height: 50px;
+  //  background-size: 40px 40px;
+  //  background-color: white;
+  //  background-repeat: no-repeat;
+  //  background-position: center;
+  //  outline: none;
+  //  border: none;
+  //  cursor: pointer;
+  //  &.btn-selected {
+  //    background-color: lightgray;
+  //  }
+  //}
 
   .settings-btn {
-    @extend .btn;
+    @extend .icon-btn;
     background-image: url("../images/ic_settings_applications_black_48dp.png");
 
     &.btn-selected {
@@ -66,7 +82,7 @@ body {
   }
   
   .info-btn {
-    @extend .btn;
+    @extend .icon-btn;
     background-image: url("../images/ic_info_black_48dp.png");
 
     &.btn-selected {
@@ -75,7 +91,7 @@ body {
   }
 
   .close-btn {
-    @extend .btn;
+    @extend .icon-btn;
     position: absolute;
     top: 5px;
     right: 5px;
@@ -88,7 +104,7 @@ body {
   }
 
   .search-btn{
-    @extend .btn;
+    @extend .icon-btn;
     background-image: url("../images/ic_search_black_48dp.png");
     &.btn-selected {
       background-image: url("../images/ic_search_white_48dp.png");
@@ -152,6 +168,16 @@ body {
 
     .walk-long-sel.selected {
       background-color: $walk-long-color;
+    }
+
+    .awesomplete {
+      font-family: inherit;
+      font-size: 0.9rem;
+      display: block;
+    }
+
+    .autocomplete-item {
+      padding: 10px;
     }
   }
 

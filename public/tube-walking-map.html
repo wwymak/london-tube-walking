@@ -6,8 +6,11 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.1/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.12.1/mapbox-gl.css' rel='stylesheet' />
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link href="css/awesomplete.css" rel="stylesheet" />
     <link href="css/tube-walking.css" rel="stylesheet" />
+
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="libs/awesomplete.min.js"></script>
 </head>
 <body>
 <nav id="map-info-menu" class="map-menu">
@@ -27,7 +30,15 @@
             </div>
             <div id="search-routes" class="content-inactive">
                 <h3>Find a route</h3>
-
+                <div class="autocomplete-item" >
+                    From: <input type="text" autocomplete="off" id="fromStationInput">
+                </div>
+                <div class="autocomplete-item" >
+                    To: <input type="text" autocomplete="off" id="toStationInput">
+                </div>
+                <div>
+                    <button class="btn" id="mapCustomRouteBtn" disabled>Map route</button>
+                </div>
             </div>
         </div>
     </div>

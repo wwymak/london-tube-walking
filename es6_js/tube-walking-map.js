@@ -14,21 +14,6 @@ var mapWidget = {
         });
         mapWidget.mapLayerIDs = [];
 
-        //mapWidget.loadDataInDistanceRange('0-0.6').then(mapWidget.parseToGeojson)
-        //    .then(function(geojson){
-        //        mapWidget.addDataToMap(ldnMap, "less5mins", geojson, "#dd3497", 0.8)
-        //    });
-        //
-        //mapWidget.loadDataInDistanceRange('0.6-1.8').then(mapWidget.parseToGeojson)
-        //    .then(function(geojson){
-        //        mapWidget.addDataToMap(ldnMap, "less15mins", geojson, "#005a32", 0.5)
-        //    });
-        //
-        //mapWidget.loadDataInDistanceRange('1.8-3.6').then(mapWidget.parseToGeojson)
-        //    .then(function(geojson){
-        //        mapWidget.addDataToMap(ldnMap, "less30mins", geojson, "#8c96c6")
-        //    })
-
         return map;
     },
 
@@ -39,6 +24,8 @@ var mapWidget = {
             $("#map-panel-content").animate({"width": 280}, 500, () => {
                 $("#closeMenuBtn").addClass('panel-active');
             });
+            $("#routes-all-selector").removeClass('content-inactive').addClass('content-active')
+            $("#search-routes").removeClass('content-active').addClass('content-inactive')
         });
 
         $("#searchBtn").on('click', (e) =>{
@@ -47,6 +34,13 @@ var mapWidget = {
             $("#map-panel-content").animate({"width": 280}, 500, () => {
                 $("#closeMenuBtn").addClass('panel-active');
             });
+
+            mapWidget.mapLayerIDs.forEach(d => {
+                mapWidget.showOrHIdeLayer(ldnMap, d, "none")
+            });
+
+            $("#search-routes").removeClass('content-inactive').addClass('content-active')
+            $("#routes-all-selector").removeClass('content-active').addClass('content-inactive')
         });
 
         $("#closeMenuBtn").on('click', () =>{
@@ -101,14 +95,6 @@ var mapWidget = {
             $(".layer-selector").each((d, el) => $(el).removeClass("selected"));
             $(e.currentTarget).addClass("selected");
         });
-    },
-
-    /**
-     * query db for tube stations data that are within five mins walk of each other
-     * @returns {*} jquery deferred promise
-     */
-    loadFiveMinsData: function(){
-        return $.ajax('/api/five-mins-walk')
     },
 
     /**
@@ -182,8 +168,110 @@ var mapWidget = {
      */
     showOrHIdeLayer: function(map, layerID, show = 'visible'){
         map.setLayoutProperty(layerID, 'visibility', show);
+    },
+
+    plotOneRoute: function(dataObj) {
+        var point1 = dataObj.point1,
+            point2 = dataObj.point2,
+            distance = dataObj.distance;
     }
 };
+
+var mapControls = {
+    initAutoComplete: function(){
+        var fromInput = document.getElementById("fromStationInput"),
+            toInput = document.getElementById("toStationInput");
+
+
+
+        mapControls.resetStationQueryParams();
+        mapControls.getStationNames().then(dataArr =>{
+            mapControls.fromAutoComplete = new Awesomplete(fromInput, {list: dataArr});
+            mapControls.toAutoComplete = new Awesomplete(toInput, {list: dataArr});
+
+            document.addEventListener('awesomplete-selectcomplete', () => {
+                mapControls.stationQueryFrom = document.querySelector("#fromStationInput").value;
+                mapControls.enableSearchRouteBtn();
+            });
+
+            document.addEventListener('awesomplete-selectcomplete', () => {
+                mapControls.stationQueryTo = document.querySelector("#toStationInput").value;
+                mapControls.enableSearchRouteBtn();
+            });
+        });
+
+
+
+        $("#mapCustomRouteBtn").on("click", () => {
+            $.ajax({
+                url: '/api/custom-route-search',
+                method: "POST",
+                //contentType: "application/json",
+                data: {
+                    point1: mapControls.stationQueryFrom,
+                    point2: mapControls.stationQueryTo
+                }
+            }).then(function(data){
+                console.log(mapWidget.parseToGeojson(data))
+                var geojson = mapWidget.parseToGeojson(data);
+                geojson.features.push({
+                    type: "Feature",
+                    properties: {
+                        "marker-symbol": "rail-metro",
+                        "marker-size": "medium",
+                        "description": data[0].point1
+                    },
+                    geometry: {
+                        "type": "Point",
+                        "coordinates": [data[0].point1.lat, data[0].point1.lng]
+                    }
+                });
+
+                geojson.features.push({
+                    type: "Feature",
+                    properties: {
+                        "marker-symbol": "rail-metro",
+                        "marker-size": "medium",
+                        "description": data[0].point2
+                    },
+                    geometry: {
+                        "type": "Point",
+                        "coordinates": [data[0].point2.lat, data[0].point2.lng]
+                    }
+                });
+
+            }, function(err){
+                alert("cannot find route...");
+            })
+        })
+    },
+
+    resetStationQueryParams: function(){
+        mapControls.stationQueryFrom = null;
+        mapControls.stationQueryTo = null;
+        $("#mapCustomRouteBtn").prop("disabled", true);
+    },
+
+    enableSearchRouteBtn: function(){
+        var searchRouteBtn = $("#mapCustomRouteBtn");
+        if(mapControls.stationQueryFrom != "" && mapControls.stationQueryFrom != null
+            && mapControls.stationQueryTo != null && mapControls.stationQueryTo != ""){
+            searchRouteBtn.prop("disabled", false);
+        }
+    },
+
+    getStationNames: function(){
+        return $.ajax("/api/tube-stations-names").then(dataArr =>{
+            mapControls.tubeStationList = dataArr
+            return dataArr
+        })
+    },
+
+    hideSearchSection: function(){
+        mapControls.resetStationQueryParams();
+        $("#search-routes").removeClass('content-active').addClass('content-inactive');
+    }
+}
 
 var ldnMap = mapWidget.initMap();
 
@@ -209,9 +297,8 @@ ldnMap.on('style.load', () =>{
         });
 
     ldnMap.on('load', ()=> {
-
-        //mapWidget.showOrHIdeLayer(ldnMap, "less15mins", "visible");
         mapWidget.initControls();
+        mapControls.initAutoComplete();
     });
 
 

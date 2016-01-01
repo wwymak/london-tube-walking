@@ -29,6 +29,18 @@ router.get('/api/five-mins-walk', function(req, res, next){
 
 });
 
+router.get('/api/tube-stations-names', function(req, res, next){
+    req.db.tubeRoutingColl.distinct("point1", function(err, keys){
+        if(err) {next(err)}
+        var outArray = [];
+        keys.forEach(function(item){
+            outArray.push(item.name);
+        })
+        res.json(outArray)
+    })
+
+});
+
 router.get('/api/all-data', function(req, res, next){
     req.db.tubeRoutingColl.find({})
         .toArray(function(err, result){
@@ -42,6 +54,29 @@ router.get('/api/all-data', function(req, res, next){
         });
 
 });
+
+router.post('/api/custom-route-search', function(req, res, next){
+    console.log(req.body);
+    var point1 = req.body.point1,
+        point2 = req.body.point2;
+
+    req.db.tubeRoutingColl.find({
+        $or: [{$and: [{"point2.name": point2}, {"point1.name": point1}]},
+        {$and: [{"point1.name": point1}, {"point2.name": point2}]}]})
+        .toArray(function(err, result){
+            if(err) return next(err);
+
+            console.log(result);
+            var out = [];
+            result.forEach(function(doc){
+                doc.routePoints = polyline.decode(doc.routePoints, 6);
+                out.push(doc);
+            })
+            res.json(result);
+        })
+
+
+})
 
 router.param('maxDist', function(req, res, next, dist) {
     req.dist = dist;
