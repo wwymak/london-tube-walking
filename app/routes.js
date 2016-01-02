@@ -56,13 +56,12 @@ router.get('/api/all-data', function(req, res, next){
 });
 
 router.post('/api/custom-route-search', function(req, res, next){
-    console.log(req.body);
     var point1 = req.body.point1,
         point2 = req.body.point2;
 
     req.db.tubeRoutingColl.find({
         $or: [{$and: [{"point2.name": point2}, {"point1.name": point1}]},
-        {$and: [{"point1.name": point1}, {"point2.name": point2}]}]})
+            {$and: [{"point1.name": point2}, {"point2.name": point1}]}]})
         .toArray(function(err, result){
             if(err) return next(err);
 

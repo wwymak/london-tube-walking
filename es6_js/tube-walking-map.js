@@ -3,7 +3,7 @@
  */
 
 var mapWidget = {
-    initMap: function(){
+    initMap(){
         mapboxgl.accessToken = 'pk.eyJ1Ijoid3d5bWFrIiwiYSI6IkxEbENMZzgifQ.pxk3bdzd7n8h4pKzc9zozw';
         var map = new mapboxgl.Map({
             container: 'map', // container id
@@ -12,12 +12,12 @@ var mapWidget = {
             zoom: 12, // starting zoom
             minZoom: 9
         });
-        mapWidget.mapLayerIDs = [];
+        this.mapLayerIDs = [];
 
         return map;
     },
 
-    initControls: function() {
+    initControls() {
         $("#settingBtn").on('click', (e) =>{
             $(".toolbar").find(".btn-selected").removeClass("btn-selected");
             $(e.currentTarget).addClass("btn-selected");
@@ -102,11 +102,11 @@ var mapWidget = {
      * @param range e.g. 0.6-1.2 (in kms) for approx walking time of 5-10 mins
      * @returns {*} jquery deferred
      */
-    loadDataInDistanceRange: function(range){
+    loadDataInDistanceRange(range){
         return $.ajax('/api/distRange/' + range);
     },
 
-    parseToGeojson: function(data){
+    parseToGeojson(data){
         var geoJson = {};
         geoJson.type = "FeatureCollection";
         geoJson.features = []
@@ -129,16 +129,51 @@ var mapWidget = {
             };
             geoJson.features.push(feature);
         }
+
+        console.log(geoJson)
         return geoJson;
     },
 
-    addDataToMap: function (map, sourceName, geojson, lineColor, opacity = 1, visibility = "none") {
+    parseToMarkerGeojson(data){
+        var geoJson = {};
+        geoJson.type = "FeatureCollection";
+        geoJson.features = [];
+        for (let i of data){
+            geoJson.features.push({
+                type: "Feature",
+                properties: {
+                    "marker-symbol": "rail-metro",
+                    "marker-size": "medium",
+                    "description": i.point2
+                },
+                geometry: {
+                    "type": "Point",
+                    "coordinates": [i.point2.lng, i.point2.lat]
+                }
+            }, {
+                type: "Feature",
+                properties: {
+                    "marker-symbol": "rail-metro",
+                    "marker-size": "medium",
+                    "description": i.point1
+                },
+                geometry: {
+                    "type": "Point",
+                    "coordinates": [i.point1.lng, i.point1.lat]
+                }
+            });
+
+        }
+        return geoJson
+    },
+
+    addDataToMap(map, sourceName, geojson, lineColor, opacity = 1, visibility = "none") {
         map.addSource(sourceName, {
             "type": "geojson",
             "data": geojson
         });
 
-        ldnMap.addLayer({
+        map.addLayer({
             "id": sourceName,
             "type": "line",
             "source": sourceName,
@@ -155,9 +190,27 @@ var mapWidget = {
             }
         });
 
-        mapWidget.mapLayerIDs.push(sourceName);
+        this.mapLayerIDs.push(sourceName);
 
-        mapWidget.showOrHIdeLayer(ldnMap, sourceName, visibility);
+        this.showOrHIdeLayer(map, sourceName, visibility);
+    },
+
+    addMarkerToMap(map, sourceName, geojson) {
+        map.addSource(sourceName, {
+            "type": "geojson",
+            "data": geojson
+        });
+
+        map.addLayer({
+            "id": sourceName,
+            "type": "symbol",
+            "source": sourceName,
+            "interactive": true,
+            "layout": {
+                "icon-image": "{marker-symbol}",
+                "text-field": "{description}"
+            }
+        });
     },
 
     /**
@@ -166,14 +219,57 @@ var mapWidget = {
      * @param layerID -- maplayer id as specified in addLayer
      * @param show -- 'visible' or 'none'
      */
-    showOrHIdeLayer: function(map, layerID, show = 'visible'){
+    showOrHIdeLayer(map, layerID, show = 'visible'){
         map.setLayoutProperty(layerID, 'visibility', show);
     },
 
-    plotOneRoute: function(dataObj) {
-        var point1 = dataObj.point1,
-            point2 = dataObj.point2,
-            distance = dataObj.distance;
+    plotOneRoute(data, map) {
+        var geojsonRoute = this.parseToGeojson(data),
+            geojsonMarkers = this.parseToMarkerGeojson(data);
+
+console.log(geojsonMarkers)
+        if(map.getLayer('searchRoute')){
+            map.removeSource('searchRoute')
+            map.removeLayer('searchRoute')
+        }
+
+        this.addDataToMap(map, "searchRoute", geojsonRoute, "blue", 1, "visible");
+        //
+        //if(map.getLayer('searchRouteMarker')){
+        //    map.removeLayer('searchRouteMarker');
+        //    map.removeSource('searchRouteMarker');
+        //}
+        //
+        //this.addMarkerToMap(map, "searchRouteMarker", geojsonMarkers);
+
+        if(!this.searchRouteMarkerSource) {
+            this.searchRouteMarkerSource = new mapboxgl.GeoJSONSource({
+                data: geojsonMarkers
+            });
+            map.addSource('searchRouteMarker', this.searchRouteMarkerSource);
+            map.addLayer({
+                "id": "searchRouteMarker",
+                "type": "symbol",
+                "source": "searchRouteMarker",
+                "layout": {
+                    "icon-image": "{marker-symbol}",
+                    "text-field": "{description}"
+                }
+            });
+        }else {
+            this.searchRouteMarkerSource.setData(geojsonMarkers);
+        }
+
+        this.zoomToBounds([[data.point1.lng, data.point1.lat],
+            [data.point2.lng, data.point2.lat]
+        ], ldnMap);
+
+
+
+    },
+
+    zoomToBounds(lngLatArr, map) {
+        map.fitBounds(lngLatArr)
     }
 };
 
@@ -181,8 +277,6 @@ var mapControls = {
     initAutoComplete: function(){
         var fromInput = document.getElementById("fromStationInput"),
             toInput = document.getElementById("toStationInput");
-
-
 
         mapControls.resetStationQueryParams();
         mapControls.getStationNames().then(dataArr =>{
@@ -212,33 +306,8 @@ var mapControls = {
                     point2: mapControls.stationQueryTo
                 }
             }).then(function(data){
-                console.log(mapWidget.parseToGeojson(data))
-                var geojson = mapWidget.parseToGeojson(data);
-                geojson.features.push({
-                    type: "Feature",
-                    properties: {
-                        "marker-symbol": "rail-metro",
-                        "marker-size": "medium",
-                        "description": data[0].point1
-                    },
-                    geometry: {
-                        "type": "Point",
-                        "coordinates": [data[0].point1.lat, data[0].point1.lng]
-                    }
-                });
+                mapWidget.plotOneRoute(data, ldnMap);
 
-                geojson.features.push({
-                    type: "Feature",
-                    properties: {
-                        "marker-symbol": "rail-metro",
-                        "marker-size": "medium",
-                        "description": data[0].point2
-                    },
-                    geometry: {
-                        "type": "Point",
-                        "coordinates": [data[0].point2.lat, data[0].point2.lng]
-                    }
-                });
 
             }, function(err){
                 alert("cannot find route...");
