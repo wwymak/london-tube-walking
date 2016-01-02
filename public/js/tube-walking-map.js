@@ -177,7 +177,7 @@ var mapWidget = {
                     properties: {
                         "marker-symbol": "rail-metro",
                         "marker-size": "medium",
-                        "description": i.point2
+                        "description": i.point2.name
                     },
                     geometry: {
                         "type": "Point",
@@ -186,9 +186,9 @@ var mapWidget = {
                 }, {
                     type: "Feature",
                     properties: {
-                        "marker-symbol": "rail-metro",
+                        "marker-symbol": "rail",
                         "marker-size": "medium",
-                        "description": i.point1
+                        "description": i.point1.name
                     },
                     geometry: {
                         "type": "Point",
@@ -255,7 +255,7 @@ var mapWidget = {
             "source": sourceName,
             "interactive": true,
             "layout": {
-                "icon-image": "{marker-symbol}",
+                "marker-symbol": "monument",
                 "text-field": "{description}"
             }
         });
@@ -284,32 +284,34 @@ var mapWidget = {
 
         this.addDataToMap(map, "searchRoute", geojsonRoute, "blue", 1, "visible");
         //
-        //if(map.getLayer('searchRouteMarker')){
-        //    map.removeLayer('searchRouteMarker');
-        //    map.removeSource('searchRouteMarker');
-        //}
-        //
-        //this.addMarkerToMap(map, "searchRouteMarker", geojsonMarkers);
-
-        if (!this.searchRouteMarkerSource) {
-            this.searchRouteMarkerSource = new mapboxgl.GeoJSONSource({
-                data: geojsonMarkers
-            });
-            map.addSource('searchRouteMarker', this.searchRouteMarkerSource);
-            map.addLayer({
-                "id": "searchRouteMarker",
-                "type": "symbol",
-                "source": "searchRouteMarker",
-                "layout": {
-                    "icon-image": "{marker-symbol}",
-                    "text-field": "{description}"
-                }
-            });
-        } else {
-            this.searchRouteMarkerSource.setData(geojsonMarkers);
+        if (map.getLayer('searchRouteMarker')) {
+            map.removeLayer('searchRouteMarker');
+            map.removeSource('searchRouteMarker');
         }
 
-        this.zoomToBounds([[data.point1.lng, data.point1.lat], [data.point2.lng, data.point2.lat]], ldnMap);
+        this.addMarkerToMap(map, "searchRouteMarker", geojsonMarkers);
+
+        //if(!this.searchRouteMarkerSource) {
+        //    this.searchRouteMarkerSource = new mapboxgl.GeoJSONSource({
+        //        data: geojsonMarkers
+        //    });
+        //    map.addSource('searchRouteMarker', this.searchRouteMarkerSource);
+        //    map.addLayer({
+        //        "id": "searchRouteMarker",
+        //        "type": "symbol",
+        //        "source": "searchRouteMarker",
+        //        "layout": {
+        //            "icon-image": "{marker-symbol}",
+        //            "text-field": "{description}"
+        //        }
+        //    });
+        //}else {
+        //    this.searchRouteMarkerSource.setData(geojsonMarkers);
+        //}
+
+        //this.zoomToBounds([[data.point1.lng, data.point1.lat],
+        //    [data.point2.lng, data.point2.lat]
+        //], ldnMap);
     },
     zoomToBounds: function zoomToBounds(lngLatArr, map) {
         map.fitBounds(lngLatArr);
