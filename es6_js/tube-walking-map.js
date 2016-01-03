@@ -8,6 +8,7 @@ var mapWidget = {
         var map = new mapboxgl.Map({
             container: 'map', // container id
             style: 'mapbox://styles/mapbox/emerald-v8', //stylesheet location
+            //style: 'mapbox://styles/mapbox/streets-v8',
             center: [-0.1275, 51.5072], // starting position
             zoom: 12, // starting zoom
             minZoom: 9
@@ -207,7 +208,7 @@ var mapWidget = {
             "source": sourceName,
             "interactive": true,
             "layout": {
-                "marker-symbol": "monument",
+                "icon-image": "rail-metro-15", // note emerald doesn't come with these icons...
                 "text-field": "{description}"
             }
         });
@@ -241,31 +242,11 @@ console.log(geojsonMarkers)
         }
 
         this.addMarkerToMap(map, "searchRouteMarker", geojsonMarkers);
-
-        //if(!this.searchRouteMarkerSource) {
-        //    this.searchRouteMarkerSource = new mapboxgl.GeoJSONSource({
-        //        data: geojsonMarkers
-        //    });
-        //    map.addSource('searchRouteMarker', this.searchRouteMarkerSource);
-        //    map.addLayer({
-        //        "id": "searchRouteMarker",
-        //        "type": "symbol",
-        //        "source": "searchRouteMarker",
-        //        "layout": {
-        //            "icon-image": "{marker-symbol}",
-        //            "text-field": "{description}"
-        //        }
-        //    });
-        //}else {
-        //    this.searchRouteMarkerSource.setData(geojsonMarkers);
-        //}
-
-        //this.zoomToBounds([[data.point1.lng, data.point1.lat],
-        //    [data.point2.lng, data.point2.lat]
-        //], ldnMap);
-
-
-
+        var bounds = [];
+        geojsonMarkers.features.forEach(d => {
+            bounds.push(d.geometry.coordinates)
+        });
+        this.zoomToBounds(bounds, ldnMap);
     },
 
     zoomToBounds(lngLatArr, map) {
